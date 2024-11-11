@@ -78,34 +78,22 @@ DELIMITER ;
 CALL actualizar_usuario(33,'Osman rolon','OsmanOrtizrolon@gmail.com','osman09',@mensaje); 
 
 SELECT @mensaje;
+
 * 4.Cree un procedimiento almacenado que permita buscar un usuario por su nombre.
 DELIMITER $$
 
-CREATE PROCEDURE buscar_usuario( 
- IN nombre VARCHAR(100) ) 
-BEGIN
- SELECT  usuario_id, nombre, email, fecha_creacion     FROM usuarios      WHERE nombre = nombre;
-END$$
-DELIMITER ;
-
-CALL buscar_usuario('Osman rolon');
-
-* 5.Realice una consulta que permita iniciar una conversación.
-DELIMITER $$
-
-CREATE PROCEDURE iniciar_conversacion(
-    IN nombre_conversacion VARCHAR(100),
-    OUT mensaje VARCHAR(100)
+CREATE PROCEDURE buscar_usuario(
+    IN nombre VARCHAR(100)
 )
 BEGIN
-    INSERT INTO conversaciones(nombre_conversacion, fecha_creacion) VALUES  (nombre_conversacion,NOW());
-SET mensaje =  CONCAT('conversacion" ',nombre_conversacion,' "creada con exito con el ID ', LAST_INSERT_ID());
+    SELECT  usuario_id, nombre, email, fecha_creacion
+    FROM usuarios 
+    WHERE nombre = nombre;
 
 END $$
 
 DELIMITER ;
 
+CALL buscar_usuario('Osman rolon');
 
-CALL iniciar_conversacion('Conversacion nueva', @mensaje);
-
-select @mensaje;
+* 5.
