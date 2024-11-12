@@ -78,6 +78,7 @@ DELIMITER ;
 CALL actualizar_usuario(33,'Osman rolon','OsmanOrtizrolon@gmail.com','osman09',@mensaje); 
 
 SELECT @mensaje;
+
 * 4.Cree un procedimiento almacenado que permita buscar un usuario por su nombre.
 DELIMITER $$
 
@@ -109,3 +110,30 @@ DELIMITER ;
 CALL iniciar_conversacion('Conversacion nueva', @mensaje);
 
 select @mensaje;
+* 6.Realice un procedimiento almacenado que permita agregar un nuevo participante a la conversación y valide si hay capacidad disponible. La cantidad maxima por cada conversación son 5 usuarios. 
+
+DELIMITER $$
+
+CREATE PROCEDURE agregar_participante(
+    IN  p_conversacion_id INT,
+    IN  p_usuario_id INT,
+    OUT mensaje VARCHAR(100)
+)
+BEGIN
+    DECLARE  cantidad_participantes INT;
+SELECT  COUNT(*) INTO cantidad_participantes FROM  participantes WHERE conversacion_id = p_conversacion_id;
+IF  cantidad_participantes <5 THEN
+INSERT INTO  participantes (usuario_id, conversacion_id)
+VALUES  (p_usuario_id,p_conversacion_id);
+SET mensaje = 'se agrego con exito el participante.';
+ELSE 
+SET mensaje =  'No se pudo agregar al participante por limite de cupo';
+END IF;
+
+END $$
+
+DELIMITER ;
+
+CALL agregar_participante(1,33,@mensaje);
+
+SELECT @mensaje;
